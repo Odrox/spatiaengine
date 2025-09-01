@@ -23,26 +23,7 @@ SpatiaEngine follows a clear, sequential process orchestrated by the `PipelineMa
 
 ```mermaid
 graph TD
-
-    A[Start] --> B{Load Config from sources.yaml}
-    B --> C[Setup Area of Interest (AOI)]
-    C --> D[Prepare Project Directories]
-    D --> E[Load & Sort Data Sources]
-    E --> F{For each enabled data source}
-    F -- Next Source --> G[Fetch Source Data]
-    G --> H{Process Data based on Type}
-    H -- Vector --> I[Clip & Reproject Vector]
-    I --> J[Save to Master GeoPackage]
-    H -- Raster --> K[Merge, Reproject, Clip Raster]
-    K --> L[Save to Imagery Folder]
-    J -- Done --> F
-    L -- Done --> F
-    F -- All Sources Done --> M{Generate QGIS Project}
-    M --> N[Copy QML Style Files]
-    N --> O[Add Layers to Project]
-    O --> P[Apply Styles based on Layer Name or qml_id]
-    P --> Q[Save .qgz Project File]
-    Q --> R[End]
+    A[Start] --> B[End]
 ```
 
 ---
