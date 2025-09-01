@@ -1,0 +1,219 @@
+# ==================================
+# Configuration du Projet
+# ==================================
+project_info:
+  id: "21600" # <<<--- METTEZ VOTRE ID DE PROJET VALIDE ICI
+  generate_qgis_project: true # true pour générer un projet QGIS, false pour désactiver
+
+# ==================================
+# Configuration de la Projection
+# ==================================
+projection:
+
+  # Définir la projection MTM cible pour toutes les couches (format EPSG:32XXX)
+  # Seules les projections MTM du Québec sont supportées (EPSG:32181 à 32190)
+  # Si non défini, la projection sera déterminée automatiquement en fonction de l'emplacement de l'AOI
+  # 
+  # Zones MTM du Québec :
+  # - Zone 1 (Abitibi) : EPSG:32181
+  # - Zone 2 : EPSG:32182
+  # - Zone 3 : EPSG:32183
+  # - Zone 4 : EPSG:32184
+  # - Zone 5 : EPSG:32185
+  # - Zone 6 : EPSG:32186
+  # - Zone 7 (Québec) : EPSG:32187
+  # - Zone 8 (Montréal) : EPSG:32188
+  # - Zone 9 (Gaspésie) : EPSG:32189
+  # - Zone 10 (Côte-Nord) : EPSG:32190
+  #
+  # Laisser vide pour une détection automatique basée sur l'emplacement
+  target_crs: ""
+  
+  # Si true, reprojette toutes les couches vers la projection MTM cible
+  # Si false, conserve la projection d'origine des couches (non recommandé)
+  reproject_all: true
+
+# ==================================
+# Configuration de la Zone d'Intérêt (AOI)
+# ==================================
+aoi_config:
+  type: SNRC
+  definition:
+    #<<<--- METTEZ VOTRE FEUILLET SNRC IC
+    - "21L04SO"
+    - "21L04NO" # ajouté pour compatibilité tests et diagnostics
+     # Exemple, mettez votre/vos feuillet(s) 50k ou 20k
+    # - "021L06"
+    # - "021L04NE"
+
+# ==================================
+# Configuration QGIS (diagnostics)
+# ==================================
+qgis:
+  skip_3d_layers: true
+  exclude_layers: []  # pas d'exclusion de couches pour éviter les conflits
+  diagnostic_mode: normal
+
+# ==================================
+# Liste des Sources de Données
+# ==================================
+datasources:
+  - name: Index SNRC 50k (Local)
+    type: local_gpkg 
+    enabled: true
+    path: $GIS_DB_PATH/INDEX.gpkg 
+    layer_name: CA_index_snrc_50k 
+    snrc_column_name: NTS_SNRC 
+    output_layer_name: emprise_aoi_combinee 
+    internal: true
+
+  - id: mnt_lidar_mffp
+    name: MNT LiDAR 1m (MFFP Québec)
+    type: mnt_lidar_quebec 
+    enabled: true  # activé pour inclure le MNT LiDAR
+    index_gpkg_path: $GIS_DB_PATH/INDEX.gpkg
+    index_layer_name: QC_index_url_snrc_mnt 
+    index_feuillet_column: feuillet 
+    index_url_column: lidar_url 
+    priority_level: 0 
+    output_name_mnt: MNT_fusionne_1m 
+    output_name_hillshade: Hillshade_MNT_1m 
+    internal: false 
+    local_cache_dir: "cache/mnt_lidar"  # optionnel si vous avez déjà des .tif téléchargés
+
+  - id: courbes_niveau_mffp
+    name: Courbes de Niveau (MFFP Québec)
+    type: courbes_niveau_quebec 
+    enabled: true  # activé pour inclure les courbes de niveau
+    index_gpkg_path: $GIS_DB_PATH/INDEX.gpkg
+    index_layer_name: QC_index_url_snrc_mnt 
+    index_feuillet_column: feuillet 
+    index_url_column: lidar_url 
+    # data_gpkg_internal_layer: "NOM_COUCHE_INTERNE_SI_BESOIN" # Optionnel
+    priority_level: 1 
+    output_layer_name: courbes_niveau 
+    internal: false 
+
+  - id: depots_morpho_sigeom_local
+    name: Dépôts Morphosédimentaires (SIGÉOM Local)
+    type: local_gpkg 
+    enabled: true
+    path: $GIS_DB_PATH/sigeom.gpkg 
+    layer_name: F10E15_ZONE_MORPH_SEDIM 
+    priority_level: 10 # Ajuster priorité
+    output_layer_name: depots_morphosedimentaires 
+    internal: true
+
+  - id: sih_puits_forages
+    name: SIH Puits et Forages
+    type: local_gpkg 
+    enabled: true 
+    path: $GIS_DB_PATH/External_GIS.gpkg
+    layer_name: QC_SIH_puits_et_Forages_250501 
+    priority_level: 11 
+    output_layer_name: puits_forages 
+    internal: true
+  
+  - id: milieux_humides_sudqc_nov2023
+    name: Milieux Humides Sud QC (Novembre 2023)
+    type: local_gpkg
+    enabled: true 
+    path: $GIS_DB_PATH/External_GIS.gpkg
+    layer_name: QC_milieux_humides_sudqc_nov2023 
+    priority_level: 12 
+    output_layer_name: milieux_humides
+    internal: true
+
+  - id: affleurement_compilation_sigeom
+    name: Affleurement Compilation (SIGÉOM Socle)
+    type: local_gpkg
+    enabled: true
+    path: $GIS_DB_PATH/SIGEOM/SIGEOM_QC_Geologie_du_socle.gpkg
+    layer_name: F3E05_AFFLEUREMENT_COMPILATION
+    priority_level: 13
+    output_layer_name: affleurement_compilation
+    internal: true
+
+  - id: contour_affleurement_sigeom
+    name: Contour Affleurement (SIGÉOM Socle)
+    type: local_gpkg
+    enabled: true
+    path: $GIS_DB_PATH/SIGEOM/SIGEOM_QC_Geologie_du_socle.gpkg
+    layer_name: F3E10_CONTOUR_AFFLEUREMENT
+    priority_level: 14
+    output_layer_name: contour_affleurement
+    internal: true
+
+  - id: marques_erosion_glaciaire_sigeom
+    name: Marques Érosion Glaciaire (SIGÉOM)
+    type: local_gpkg
+    enabled: true
+    path: $GIS_DB_PATH/sigeom.gpkg 
+    layer_name: F10E22_MARQU_EROSI_GLACI
+    priority_level: 15
+    output_layer_name: marques_erosion_glaciaire
+    internal: true
+  
+  - id: documents_examine_sigeom
+    name: Documents Examinés (SIGÉOM)
+    type: local_gpkg 
+    enabled: true
+    path: $GIS_DB_PATH/SIGEOM/SIGEOM_QC_Examine.gpkg
+    layer_name: E6E02_DOCUMENT
+    priority_level: 16
+    output_layer_name: documents_examine_sigeom
+    internal: true
+
+  - id: depots_granulats_sigeom
+    name: Dépôts Granulats (SIGÉOM)
+    type: local_gpkg
+    enabled: true
+    path: $GIS_DB_PATH/SIGEOM/SIGEOM_QC_Granulats.gpkg
+    layer_name: F10E24_DEPOT_GRANU
+    priority_level: 17
+    output_layer_name: depots_granulats
+    internal: true
+
+  - id: occupation_terre_cotq_2022
+    name: Occupation des Terres Québec 2022
+    type: local_raster 
+    enabled: true
+    path: $GIS_DB_PATH/Imagery_DB/QC/occupation_terre_202201/COTQ_2022_V1.tif
+    priority_level: 18
+    output_name_raster: COTQ_2022_10m 
+    qml_id: COTQ
+    internal: true 
+
+  - id: hydro_lignes_grhq_local
+    name: Hydrographie Lignes (GRHQ Local Indexé)
+    type: indexed_local_gpkg 
+    enabled: true  # désactivé pour éviter les problèmes de chargement QGIS
+    data_gpkg_path: $GIS_DB_PATH/GRHQ_RH_L_250508.gpkg
+    index_gpkg_path: $GIS_DB_PATH/GRHQ_RH_L_250508.gpkg 
+    index_layer_name: QC_index_grhq
+    index_block_column: Bloc
+    priority_level: 19 
+    output_layer_name: hydro_lignes 
+    internal: true
+
+  - id: hydro_surfaces_grhq_local
+    name: Hydrographie Surfaces (GRHQ Local Indexé)
+    type: indexed_local_gpkg 
+    enabled: true  # désactivé pour éviter les problèmes de chargement QGIS
+    data_gpkg_path: $GIS_DB_PATH/GRHQ_RH_S_250508.gpkg
+    index_gpkg_path: $GIS_DB_PATH/GRHQ_RH_L_250508.gpkg 
+    index_layer_name: QC_index_grhq
+    index_block_column: Bloc
+    priority_level: 20
+    output_layer_name: hydro_surfaces 
+    internal: true
+  
+  - id: reseau_routier_aqreseau_local
+    name: Réseau Routier (AQreseau Local)
+    type: local_gpkg 
+    enabled: true
+    path: $GIS_DB_PATH/AQreseau.gpkg 
+    layer_name: AQ_ROUTES 
+    priority_level: 21
+    output_layer_name: reseau_routier 
+    internal: true

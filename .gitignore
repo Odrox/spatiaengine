@@ -1,0 +1,76 @@
+# Fichiers et dossiers Python spécifiques
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.dist-info/
+*.so
+*.dylib
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environnements virtuels
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+collecteur_env/ # Si vous avez nommé votre environnement conda ainsi et qu'il est dans le projet
+
+# Fichiers de configuration de l'IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Fichiers de sortie générés par le script
+output_data/
+logs/
+temp_test_hydro_output/ # Dossier de test que nous avions créé
+
+# Fichiers macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.temp
+tempCodeRunnerFile.py # Fichier temporaire de VS Code Runner
+
+# Fichiers de données volumineux ou sensibles (si vous ne voulez pas les versionner)
+# Par exemple, si vos GPKG de référence sont dans le dossier du projet (ce qui n'est pas votre cas ici)
+# /Users/Shared/CodeBase/References/GIS_DB/ # Ne pas mettre ce chemin absolu ici
+# mais si vous aviez un dossier 'data_references/' dans le projet:
+# data_references/*.gpkg
+
+
+# Fichiers de sortie et de projet QGIS
+out/
+*.qgz
+*.gpkg
+*.kml
+
+
+# Dossiers temporaires ou de cache
+cache/
+to_delete_later/
