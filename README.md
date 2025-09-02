@@ -1,4 +1,80 @@
-# SpatiaEngine V1
+![Geomatic Automation Pipeline SpaciaEngine v1.0](presentation.jpg)
+
+# SpatiaEngine
+
+SpatiaEngine is a powerful and flexible Python framework designed for automated geospatial data processing and analysis. It provides a modular and extensible architecture for building custom geospatial pipelines, from data extraction and transformation to advanced spatial analysis and visualization.
+
+## Features
+
+- **Modular Design**: Easily integrate new data sources, processing steps, and output formats.
+- **Automated Workflows**: Define and execute complex geospatial workflows with minimal manual intervention.
+- **Scalable**: Process large datasets efficiently.
+- **Extensible**: Built on top of popular geospatial libraries (e.g., GDAL/OGR, Fiona, Shapely, Rasterio, PyQGIS).
+- **Configuration-driven**: Manage data sources, processing parameters, and output settings through simple configuration files.
+
+## Installation
+
+1.  **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/your-username/spatiaengine.git
+    cd spatiaengine
+    ```
+
+2.  **Create a Conda environment** (recommended):
+
+    ```bash
+    conda env create -f environment.yml
+    conda activate spatiaengine
+    ```
+
+3.  **Install dependencies**:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Usage
+
+### Configuration
+
+All configurations are managed through `config/sources.yaml`. This file defines your data sources, processing parameters, and output settings. Refer to the `config/sources.yaml` for detailed examples.
+
+### Running a Pipeline
+
+To run a geospatial processing pipeline, execute the `main.py` script:
+
+```bash
+python main.py --config config/sources.yaml --aoi-id <your_aoi_id>
+```
+
+Replace `<your_aoi_id>` with the ID of the Area of Interest (AOI) defined in your `sources.yaml` file.
+
+## Project Structure
+
+```
+. # Project root
+├── config/             # Configuration files (e.g., sources.yaml)
+├── core/               # Core application logic
+│   ├── aoi/            # Area of Interest management
+│   ├── datasources/    # Data source handling (vector, raster, WFS)
+│   ├── pipeline/       # Pipeline management and execution
+│   ├── processing/     # Geospatial processing modules
+│   ├── qgis/           # QGIS project generation
+│   └── utils/          # Utility functions (logging, file handling)
+├── output_data/        # Processed data outputs
+├── tests/              # Unit and integration tests
+└── main.py             # Main entry point for the application
+```
+
+## Contributing
+
+We welcome contributions! Please see our `CONTRIBUTING.md` for guidelines.
+
+## License
+
+This project is licensed under the MIT License - see the `LICENSE` file for details.
+ V1
 
 **SpatiaEngine** is a powerful, configuration-driven GIS data processing pipeline designed to automate the tedious and time-consuming tasks of geospatial data preparation. It streamlines the entire workflow, from data acquisition to final project delivery, allowing GIS professionals to focus on analysis rather than data wrangling.
 
